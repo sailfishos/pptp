@@ -11,6 +11,7 @@ Patch1:     install-ownership.patch
 BuildRequires:  coreutils
 BuildRequires:  ppp-devel
 
+
 %description
 PPTP client for the proprietary Microsoft Point-to-Point Tunneling Protocol.
 
