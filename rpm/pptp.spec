@@ -15,6 +15,12 @@ BuildRequires:  ppp-devel
 %description
 PPTP client for the proprietary Microsoft Point-to-Point Tunneling Protocol.
 
+%package setup
+Summary:    PPTP configuration script
+Requires:   %{name} = %{version}-%{release}
+
+%description setup
+PPTP Configuration script.
 
 %prep
 %setup -q -n %{name}-%{version}/%{name}
@@ -30,9 +36,11 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-/usr/sbin/pptp
-/usr/sbin/pptpsetup
+%{_sbindir}/pptp
 %config %{_sysconfdir}/ppp/options.pptp
 %exclude %{_mandir}/man8/pptp.8.gz
 %exclude %{_mandir}/man8/pptpsetup.8.gz
+
+%files setup
+%{_sbindir}/pptpsetup
 
