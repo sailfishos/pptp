@@ -1,8 +1,7 @@
 Name:       pptp
 Summary:    Client for the proprietary Microsoft Point-to-Point Tunneling Protocol
-Version:    1.8.0
+Version:    1.10.0
 Release:    1
-Group:      Applications/Internet
 License:    GPLv2+
 URL:        http://pptpclient.sourceforge.net/
 Source0:    https://sourceforge.net/projects/pptpclient/files/%{name}/%{name}-%{version}/%{name}-%{version}.tar.gz
@@ -23,12 +22,10 @@ Requires:   %{name} = %{version}-%{release}
 PPTP Configuration script.
 
 %prep
-%setup -q -n %{name}-%{version}/%{name}
-%patch0 -p1
-%patch1 -p1
+%autosetup -p1 -n %{name}-%{version}/%{name}
 
 %build
-make %{?jobs:-j%jobs}
+%make_build
 
 %install
 rm -rf %{buildroot}
@@ -36,6 +33,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
+%license COPYING
 %{_sbindir}/pptp
 %config %{_sysconfdir}/ppp/options.pptp
 %exclude %{_mandir}/man8/pptp.8.gz
