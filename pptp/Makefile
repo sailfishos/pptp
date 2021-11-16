@@ -1,5 +1,5 @@
 # $Id: Makefile,v 1.51 2011/11/29 22:05:07 quozl Exp $
-VERSION=1.8.0
+VERSION=1.10.0
 RELEASE=
 
 #################################################################
@@ -19,7 +19,7 @@ RM	= rm -f
 OPTIMIZE= -O -Wuninitialized
 DEBUG	= -g
 INCLUDE =
-CFLAGS  = -Wall $(OPTIMIZE) $(DEBUG) $(INCLUDE)
+# CFLAGS  = -Wall $(OPTIMIZE) $(DEBUG) $(INCLUDE)
 # Solaris
 # CFLAGS +=  -D_XPG4_2 -D__EXTENSIONS__
 LIBS	= -lutil
@@ -27,17 +27,17 @@ LIBS	= -lutil
 # LIBS	= -lnsl -lsocket -lresolv
 # Solaris Nevada build 14 or above
 # LIBS    = -lnsl -lsocket
-LDFLAGS	=
+# LDFLAGS	=
 
 PPTP_BIN = pptp
 
 PPTP_OBJS = pptp.o pptp_gre.o ppp_fcs.o \
             pptp_ctrl.o dirutil.o vector.o \
-	    inststr.o util.o version.o test.o \
+	    util.o version.o test-redirections.o \
 	    pptp_quirks.o orckit_quirks.o pqueue.o pptp_callmgr.o routing.o \
 	    pptp_compat.o
 
-PPTP_DEPS = pptp_callmgr.h pptp_gre.h ppp_fcs.h util.h test.h \
+PPTP_DEPS = pptp_callmgr.h pptp_gre.h ppp_fcs.h util.h test-redirections.h \
 	    pptp_quirks.h orckit_quirks.h config.h pqueue.h routing.h
 
 all: config.h $(PPTP_BIN) pptpsetup.8
@@ -46,7 +46,7 @@ $(PPTP_BIN): $(PPTP_OBJS) $(PPTP_DEPS)
 	$(CC) -o $(PPTP_BIN) $(PPTP_OBJS) $(LDFLAGS) $(LIBS)
 
 pptpsetup.8: pptpsetup
-	pod2man $? > $@
+	pod2man --section=8 $? > $@
 
 config.h:
 	( \
@@ -58,9 +58,10 @@ config.h:
 
 vector_test: vector_test.o vector.o
 	$(CC) -o vector_test vector_test.o vector.o
+	./vector_test
 
 clean:
-	$(RM) *.o config.h
+	$(RM) *.o config.h pptpsetup.8
 
 clobber: clean
 	$(RM) $(PPTP_BIN) vector_test
@@ -122,7 +123,6 @@ pptp.o: pptp_callmgr.h
 pptp.o: pptp_gre.h
 pptp.o: pptp_compat.h
 pptp.o: version.h
-pptp.o: inststr.h
 pptp.o: util.h
 pptp.o: pptp_quirks.h
 pptp.o: pptp_msg.h
@@ -152,7 +152,7 @@ pptp_gre.o: pptp_msg.h
 pptp_gre.o: pptp_gre.h
 pptp_gre.o: util.h
 pptp_gre.o: pqueue.h
-pptp_gre.o: test.h
+pptp_gre.o: test-redirections.h
 pptp_quirks.o: orckit_quirks.h
 pptp_quirks.o: pptp_options.h
 pptp_quirks.o: pptp_ctrl.h
@@ -162,8 +162,9 @@ pptp_quirks.o: pptp_quirks.h
 pqueue.o: util.h
 pqueue.o: pqueue.h
 routing.o: routing.h
-test.o: util.h
-test.o: test.h
+routing.o: config.h
+test-redirections.o: util.h
+test-redirections.o: test-redirections.h
 util.o: util.h
 vector.o: pptp_ctrl.h
 vector.o: pptp_compat.h

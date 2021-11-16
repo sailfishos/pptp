@@ -3,13 +3,17 @@
 
 #include <time.h>
 #include <sys/time.h>
+#include <sys/types.h>
 
 /* wait this many seconds for missing packets before forgetting about them */
 #define DEFAULT_PACKET_TIMEOUT 0.3
 extern int packet_timeout_usecs;
 
 /* assume packet is bad/spoofed if it's more than this many seqs ahead */
-#define MISSING_WINDOW 300
+/* default is NOT to check - command line override via '--missing-window <n>' */
+/* default value is 300 - recommended is 6000 for high speed data rates */
+#define MISSING_WINDOW -1
+extern int missing_window;
 
 /* Packet queue structure: linked list of packets received out-of-order */
 typedef struct pqueue {
