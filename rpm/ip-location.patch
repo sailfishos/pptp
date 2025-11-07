@@ -7,7 +7,7 @@ index cff4aa1..43f0f09 100644
  # Solaris
  # PPPD = /usr/bin/pppd
 -IP = /bin/ip
-+IP = /sbin/ip
++IP = /usr/sbin/ip
  #################################################################
  
  BINDIR=$(DESTDIR)/usr/sbin
